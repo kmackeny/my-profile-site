@@ -1,0 +1,33 @@
+name: Deploy to Pages
+
+on:
+  push:
+    branches: [ main ]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest  # Runner 起動
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+
+      - name: 公開フォルダを準備
+        run: |
+          mkdir -p dist
+          cp index.html dist/index.html
+
+      - uses: actions/upload-pages-artifact@v3  # artifact を預ける
+        with:
+          path: dist
+
+      - name: デプロイ
+        id: deployment
+        uses: actions/deploy-pages@v4  # artifact を受け取って公開
