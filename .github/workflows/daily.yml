@@ -1,0 +1,23 @@
+name: Daily Update
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # 毎日 UTC 0:00（日本時間 9:00）
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest  # Runner 起動
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 日付を記録
+        run: |
+          echo "最終更新: $(date '+%Y-%m-%d %H:%M')" > last-updated.txt
+          git config user.email "action@github.com"
+          git config user.name "GitHub Actions"
+          git add last-updated.txt
+          git commit -m "chore: 自動更新 $(date '+%Y-%m-%d')" || exit 0
+          git push
