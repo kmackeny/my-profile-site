@@ -13,7 +13,8 @@ jobs:
         uses: actions/checkout@v4  # checkout アクション
 
       - name: Hello World を表示
-        run: echo "Hello, GitHub Actions! 🎉"
+        run: echo "Hello, GitHub Actions!"
 
       - name: ブランチ名を表示
-        run: echo "Branch: ${{ github.ref_name }}"
+        run: |
+          echo "Branch: ${{ github.ref_name }}"
